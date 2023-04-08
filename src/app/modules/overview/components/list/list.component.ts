@@ -5,9 +5,6 @@ import {Commit} from "../../../../data/types/data.type";
 import {parseLinkHeader} from "@web3-storage/parse-link-header";
 import {HttpResponse} from "@angular/common/http";
 
-const until = startOfMonth(new Date());
-const since = subMonths(until, 1);
-
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -19,10 +16,13 @@ export class ListComponent implements OnInit {
   collectionSize = 0;
   page = 1;
   pageSize = 15;
+  until = startOfMonth(new Date());
+  since = subMonths(this.until, 1);
+
   constructor(private readonly dataService: DataService, private readonly cdRef: ChangeDetectorRef) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getCommits()
   }
 
@@ -42,9 +42,9 @@ export class ListComponent implements OnInit {
   }
 
   private getCommits(): void {
-    this.dataService.getCommits(since, until, this.page, this.pageSize).subscribe(response => {
+    this.dataService.getCommits(this.since, this.until, this.page, this.pageSize).subscribe(response => {
       this.commits = response.body;
-      this.collectionSize = this.getCollectionSize(response);
+      this.collectionSize ||= this.getCollectionSize(response);
       this.cdRef.markForCheck();
     })
   }
