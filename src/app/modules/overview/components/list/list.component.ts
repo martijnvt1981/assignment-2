@@ -1,5 +1,12 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {DataService} from "../../../../data/service/data.service";
+import {startOfMonth, subMonths} from 'date-fns';
+import {Commit} from "../../../../data/types/data.type";
+import {parseLinkHeader} from "@web3-storage/parse-link-header";
+import {HttpResponse} from "@angular/common/http";
+
+const until = startOfMonth(new Date());
+const since = subMonths(until, 1);
 
 @Component({
   selector: 'app-list',
@@ -7,8 +14,38 @@ import {DataService} from "../../../../data/service/data.service";
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListComponent {
-  commits$ = this.dataService.getCommits();
-  constructor(private readonly dataService: DataService) {
+export class ListComponent implements OnInit {
+  commits?: Commit[];
+  collectionSize = 0;
+  page = 1;
+  pageSize = 15;
+  constructor(private readonly dataService: DataService, private readonly cdRef: ChangeDetectorRef) {
+  }
+
+  ngOnInit() {
+    this.getCommits()
+  }
+
+  onPageChange(number: number): void {
+    this.page = number;
+    this.getCommits();
+  }
+
+  private getCollectionSize(response: HttpResponse<any>): number {
+    const parsedLinkHeader = parseLinkHeader(response.headers.get('link'));
+    if (!parsedLinkHeader) {
+      return 0
+    }
+    const pages = Number(parsedLinkHeader['last']['page']);
+    const perPage = Number(parsedLinkHeader['last']['per_page']);
+    return perPage * pages
+  }
+
+  private getCommits(): void {
+    this.dataService.getCommits(since, until, this.page, this.pageSize).subscribe(response => {
+      this.commits = response.body;
+      this.collectionSize = this.getCollectionSize(response);
+      this.cdRef.markForCheck();
+    })
   }
 }

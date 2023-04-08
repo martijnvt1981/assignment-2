@@ -4,7 +4,7 @@
   </ol>
 </nav>
 
-<table class="table table-striped" *ngIf="commits$ | async as commits">
+<table class="table table-striped" *ngIf="commits">
   <thead>
     <tr>
       <th scope="col" class="table-header-message">Message</th>
@@ -14,9 +14,14 @@
   </thead>
   <tbody>
     <tr *ngFor="let commit of commits">
-      <td class="table-data-message">{{commit.commit.message}}</td>
+      <td class="table-data-message"><a [routerLink]="['commit', commit.sha]">{{commit.commit.message}}</a></td>
       <td>{{commit.commit.committer?.date | date:'medium'}}</td>
       <td>{{commit.commit.author?.name}}</td>
     </tr>
   </tbody>
 </table>
+
+<ngb-pagination [(page)]="page"
+                [collectionSize]="collectionSize"
+                (pageChange)="onPageChange($event)"
+                [pageSize]="pageSize" aria-label="Default pagination"></ngb-pagination>
