@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CommitComponent } from './commit.component';
+import {MockProvider} from "ng-mocks";
+import {DataService} from "../../../../data/service/data.service";
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('CommitComponent', () => {
   let component: CommitComponent;
@@ -8,7 +11,9 @@ describe('CommitComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CommitComponent ]
+      declarations: [ CommitComponent ],
+      imports: [RouterTestingModule],
+      providers: [MockProvider(DataService)]
     })
     .compileComponents();
 

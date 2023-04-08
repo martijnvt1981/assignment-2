@@ -22,18 +22,21 @@ describe('DataService', () => {
   });
 
   it('should return an array of commits', (done: DoneFn) => {
-    const ref = 'sha-112332232';
-    const response = { COMMIT };
+    const since = new Date(2023,2,1);
+    const until = new Date(2023,2,2);
+    const page = 1;
+    const perPage = 10;
+    const response = [COMMIT];
 
     service
-      .getCommits(ref)
+      .getCommits(since, until, page, perPage)
       .subscribe((response: Commit) => {
         expect(response).toEqual(COMMIT);
         done();
       });
 
     const req = httpTestingController.expectOne(
-      `https://api.github.com/repos/angular/angular/commits/${ref}`
+      `https://api.github.com/repos/angular/angular/commits?since=${since.toISOString()}&until=${until.toISOString()}&page=${page}&per_page=${perPage}`
     );
 
     expect(req.request.method).toBe('GET');
