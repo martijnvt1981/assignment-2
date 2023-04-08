@@ -1,0 +1,25 @@
+:host {
+  display: block;
+  position: sticky;
+  top: 0;
+}
+
+.navbar {
+  background-color: gold;
+}
+
+.menu {
+  margin-block: 0;
+  padding: 1.25rem;
+  list-style: none;
+  background-color: gold;
+  display: flex;
+
+  & > li:not(:first-child) {
+    margin-left: 1.875rem;
+  }
+
+  & > li {
+    position: relative;
+  }
+}
