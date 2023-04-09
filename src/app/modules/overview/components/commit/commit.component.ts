@@ -18,7 +18,7 @@ export class CommitComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const ref = this.activatedRoute.snapshot.params['id'];
-    this.commit$ = this.dataService.getCommit(ref);
+    const id = this.activatedRoute.snapshot.params['id'];
+    this.commit$ = this.dataService.getCommit(id);
   }
 }

@@ -31,19 +31,16 @@ export class DateRangeComponent {
   ) {}
 
   onDateSelection(date: NgbDate) {
-    if (!this.fromDate && !this.toDate) {
+    if ((!this.fromDate && !this.toDate) || (this.fromDate && this.toDate)) {
       this.fromDate = date;
-    } else if (
-      this.fromDate &&
-      !this.toDate &&
-      date &&
-      date.after(this.fromDate)
-    ) {
+      this.toDate = null;
+      return;
+    }
+
+    if (this.fromDate && !this.toDate && date?.after(this.fromDate)) {
       this.toDate = date;
       this.rangeChange.emit(this.getDates(this.fromDate, this.toDate));
-    } else {
-      this.toDate = null;
-      this.fromDate = date;
+      return;
     }
   }
 

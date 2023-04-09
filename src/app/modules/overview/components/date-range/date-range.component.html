@@ -10,6 +10,7 @@
           [displayMonths]="2"
           [startDate]="fromDate!"
           class="form-control"
+          data-test="datepicker"
           name="datepicker"
           ngbDatepicker
           outsideDays="hidden"
@@ -35,6 +36,7 @@
         (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
         [value]="formatter.format(fromDate)"
         class="form-control"
+        data-test="from-date"
         name="dpFromDate"
         placeholder="yyyy-mm-dd"
       />
@@ -52,6 +54,7 @@
         (input)="toDate = validateInput(toDate, dpToDate.value)"
         [value]="formatter.format(toDate)"
         class="form-control"
+        data-test="to-date"
         name="dpToDate"
         placeholder="yyyy-mm-dd"
       />
