@@ -11,6 +11,7 @@ import {
   NgbDateParserFormatter,
   NgbDateStruct,
 } from '@ng-bootstrap/ng-bootstrap';
+import { DateRange } from '../../../../shared/date.model';
 
 @Component({
   selector: 'app-date-range',
@@ -22,7 +23,7 @@ export class DateRangeComponent {
   hoveredDate: NgbDate | null = null;
   @Input() fromDate: NgbDate | null = null;
   @Input() toDate: NgbDate | null = null;
-  @Output() rangeChange = new EventEmitter<Date[]>();
+  @Output() rangeChange = new EventEmitter<DateRange>();
 
   constructor(
     private readonly calendar: NgbCalendar,
@@ -76,10 +77,10 @@ export class DateRangeComponent {
       : currentValue;
   }
 
-  private getDates(from: NgbDateStruct, to: NgbDateStruct): Date[] {
-    return [
-      new Date(from.year, from.month - 1, from.day),
-      new Date(to.year, to.month - 1, to.day),
-    ];
+  private getDates(from: NgbDateStruct, to: NgbDateStruct): DateRange {
+    return {
+      from: new Date(from.year, from.month - 1, from.day),
+      to: new Date(to.year, to.month - 1, to.day),
+    };
   }
 }

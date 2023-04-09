@@ -6,10 +6,11 @@ import {
 } from '@angular/core';
 import { DataService } from '../../../../data/service/data.service';
 import { startOfMonth, subMonths } from 'date-fns';
-import { Commit } from '../../../../data/types/data.type';
+import { Commit } from '../../../../data/types/data.model';
 import { parseLinkHeader } from '@web3-storage/parse-link-header';
 import { HttpResponse } from '@angular/common/http';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { DateRange } from '../../../../shared/date.model';
 
 @Component({
   selector: 'app-list',
@@ -42,9 +43,9 @@ export class ListComponent implements OnInit {
     this.getCommits();
   }
 
-  onRangeChange(dates: Date[]): void {
-    this.fromDate = dates[0];
-    this.toDate = dates[1];
+  onRangeChange(dates: DateRange): void {
+    this.fromDate = dates.from;
+    this.toDate = dates.to;
     this.getCommits();
   }
 

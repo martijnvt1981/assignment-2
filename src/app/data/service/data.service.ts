@@ -6,7 +6,7 @@ import {
   HttpParams,
   HttpResponse,
 } from '@angular/common/http';
-import { Commit } from '../types/data.type';
+import { Commit } from '../types/data.model';
 
 const headers = new HttpHeaders().set('X-GitHub-Api-Version', '2022-11-28');
 

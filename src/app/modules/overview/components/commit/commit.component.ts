@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DataService } from '../../../../data/service/data.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Commit } from '../../../../data/types/data.type';
+import { Commit } from '../../../../data/types/data.model';
 
 @Component({
   selector: 'app-commit',
