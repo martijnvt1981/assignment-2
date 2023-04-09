@@ -3,17 +3,20 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'overview',
-    loadChildren: () => import('./modules/overview/overview.module').then(m => m.OverviewModule)
+    path: 'commits',
+    loadChildren: () =>
+      import('./modules/overview/overview.module').then(
+        (m) => m.OverviewModule
+      ),
   },
   {
     path: '',
-    redirectTo: '/overview',
-    pathMatch: 'full'
+    redirectTo: '/commits',
+    pathMatch: 'full',
   },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

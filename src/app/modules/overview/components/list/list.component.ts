@@ -1,29 +1,40 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {DataService} from "../../../../data/service/data.service";
-import {startOfMonth, subMonths} from 'date-fns';
-import {Commit} from "../../../../data/types/data.type";
-import {parseLinkHeader} from "@web3-storage/parse-link-header";
-import {HttpResponse} from "@angular/common/http";
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
+import { DataService } from '../../../../data/service/data.service';
+import { startOfMonth, subMonths } from 'date-fns';
+import { Commit } from '../../../../data/types/data.type';
+import { parseLinkHeader } from '@web3-storage/parse-link-header';
+import { HttpResponse } from '@angular/common/http';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListComponent implements OnInit {
-  commits?: Commit[];
+  commits: Commit[] | null = [];
   collectionSize = 0;
   page = 1;
   pageSize = 15;
-  until = startOfMonth(new Date());
-  since = subMonths(this.until, 1);
-
-  constructor(private readonly dataService: DataService, private readonly cdRef: ChangeDetectorRef) {
-  }
+  toDate = startOfMonth(new Date());
+  toNgbDate: NgbDate | null = null;
+  fromDate = subMonths(this.toDate, 1);
+  fromNgbDate: NgbDate | null = null;
+  constructor(
+    private readonly dataService: DataService,
+    private readonly cdRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
-    this.getCommits()
+    this.fromNgbDate = this.getNgDate(this.fromDate);
+    this.toNgbDate = this.getNgDate(this.toDate);
+    this.getCommits();
   }
 
   onPageChange(number: number): void {
@@ -31,21 +42,41 @@ export class ListComponent implements OnInit {
     this.getCommits();
   }
 
+  onRangeChange(dates: Date[]): void {
+    this.fromDate = dates[0];
+    this.toDate = dates[1];
+    this.getCommits();
+  }
+
   private getCollectionSize(response: HttpResponse<any>): number {
     const parsedLinkHeader = parseLinkHeader(response.headers.get('link'));
-    if (!parsedLinkHeader) {
-      return 0
+    const linkHeaderContainsLastValue = Boolean(parsedLinkHeader?.['last']);
+
+    if (!parsedLinkHeader || !linkHeaderContainsLastValue) {
+      return this.collectionSize;
     }
+
     const pages = Number(parsedLinkHeader['last']['page']);
     const perPage = Number(parsedLinkHeader['last']['per_page']);
-    return perPage * pages
+
+    return perPage * pages;
   }
 
   private getCommits(): void {
-    this.dataService.getCommits(this.since, this.until, this.page, this.pageSize).subscribe(response => {
-      this.commits = response.body;
-      this.collectionSize ||= this.getCollectionSize(response);
-      this.cdRef.markForCheck();
-    })
+    this.dataService
+      .getCommits(this.fromDate, this.toDate, this.page, this.pageSize)
+      .subscribe((response) => {
+        this.commits = response.body;
+        this.collectionSize = this.getCollectionSize(response);
+        this.cdRef.markForCheck();
+      });
+  }
+
+  private getNgDate(date: Date): NgbDate | null {
+    return NgbDate.from({
+      year: date.getFullYear(),
+      month: date.getMonth() + 1,
+      day: date.getDate(),
+    });
   }
 }

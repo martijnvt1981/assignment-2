@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-
 import { DataService } from './data.service';
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {Commit} from "../types/data.type";
-import {COMMIT} from "../../../../test-helpers/commit.constants";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
+import { COMMIT } from '../../../../test-helpers/commit.constants';
 
 describe('DataService', () => {
   let service: DataService;
@@ -22,38 +23,36 @@ describe('DataService', () => {
   });
 
   it('should return an array of commits', (done: DoneFn) => {
-    const since = new Date(2023,2,1);
-    const until = new Date(2023,2,2);
+    const fromDate = new Date(2023, 2, 1);
+    const toDate = new Date(2023, 2, 2);
     const page = 1;
     const perPage = 10;
-    const response = [COMMIT];
+    const data = [COMMIT];
 
     service
-      .getCommits(since, until, page, perPage)
-      .subscribe((response: Commit) => {
-        expect(response).toEqual(COMMIT);
+      .getCommits(fromDate, toDate, page, perPage)
+      .subscribe((response) => {
+        expect(response.body).toEqual(data);
         done();
       });
 
     const req = httpTestingController.expectOne(
-      `https://api.github.com/repos/angular/angular/commits?since=${since.toISOString()}&until=${until.toISOString()}&page=${page}&per_page=${perPage}`
+      `https://api.github.com/repos/angular/angular/commits?since=${fromDate.toISOString()}&until=${toDate.toISOString()}&page=${page}&per_page=${perPage}`
     );
 
     expect(req.request.method).toBe('GET');
 
-    req.flush(response);
+    req.flush(data);
   });
 
   it('should return a single commit', (done: DoneFn) => {
     const ref = 'sha-112332232';
-    const response = { COMMIT };
+    const data = COMMIT;
 
-    service
-      .getCommit(ref)
-      .subscribe((response: Commit) => {
-        expect(response).toEqual(COMMIT);
-        done();
-      });
+    service.getCommit(ref).subscribe((response) => {
+      expect(response).toEqual(data);
+      done();
+    });
 
     const req = httpTestingController.expectOne(
       `https://api.github.com/repos/angular/angular/commits/${ref}`
@@ -61,6 +60,6 @@ describe('DataService', () => {
 
     expect(req.request.method).toBe('GET');
 
-    req.flush(response);
+    req.flush(data);
   });
 });

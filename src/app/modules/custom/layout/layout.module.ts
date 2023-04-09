@@ -4,21 +4,9 @@ import { FooterComponent } from './components/footer/footer.component';
 import { NavComponent } from './components/nav/nav.component';
 import { MainComponent } from './components/main/main.component';
 
-
-
 @NgModule({
-    declarations: [
-        FooterComponent,
-        NavComponent,
-        MainComponent
-    ],
-  exports: [
-    FooterComponent,
-    NavComponent,
-    MainComponent
-  ],
-    imports: [
-        CommonModule
-    ]
+  declarations: [FooterComponent, NavComponent, MainComponent],
+  exports: [FooterComponent, NavComponent, MainComponent],
+  imports: [CommonModule],
 })
-export class LayoutModule { }
+export class LayoutModule {}

@@ -1,21 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {OverviewRoutingModule} from "./overview-routing.module";
+import { OverviewRoutingModule } from './overview-routing.module';
 import { ListComponent } from './components/list/list.component';
 import { CommitComponent } from './components/commit/commit.component';
-import {NgbPagination} from "@ng-bootstrap/ng-bootstrap";
-
-
+import { NgbInputDatepicker, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+import { DateRangeComponent } from './components/date-range/date-range.component';
 
 @NgModule({
-  declarations: [
-    ListComponent,
-    CommitComponent
-  ],
+  declarations: [ListComponent, CommitComponent, DateRangeComponent],
   imports: [
     CommonModule,
     OverviewRoutingModule,
-    NgbPagination
-  ]
+    NgbPagination,
+    NgbInputDatepicker,
+  ],
 })
-export class OverviewModule { }
+export class OverviewModule {}
