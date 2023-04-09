@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.table {
+  th {
+    padding-inline-end: 0.625rem;
+    vertical-align: top;
+    white-space: nowrap;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}

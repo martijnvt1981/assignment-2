@@ -1,0 +1,41 @@
+<nav aria-label="breadcrumb" class="mb-4">
+  <ol class="breadcrumb">
+    <li aria-current="page" class="breadcrumb-item active">Overview</li>
+  </ol>
+</nav>
+
+<app-date-range
+  (rangeChange)="onRangeChange($event)"
+  [fromDate]="fromNgbDate"
+  [toDate]="toNgbDate"
+  class="mb-4"
+  data-test="date-range"
+></app-date-range>
+
+<table *ngIf="commits" class="table table-striped">
+  <thead>
+    <tr>
+      <th class="table-header-message" scope="col">Message</th>
+      <th scope="col">Timestamp</th>
+      <th scope="col">Author</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let commit of commits">
+      <td class="table-data-message">
+        <a [routerLink]="[commit.sha]">{{ commit.commit.message }}</a>
+      </td>
+      <td>{{ commit.commit.committer?.date | date : "medium" }}</td>
+      <td>{{ commit.commit.author?.name }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<ngb-pagination
+  (pageChange)="onPageChange($event)"
+  [(page)]="page"
+  [collectionSize]="collectionSize"
+  [pageSize]="pageSize"
+  aria-label="Default pagination"
+  data-test="pagination"
+></ngb-pagination>

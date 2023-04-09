@@ -1,0 +1,31 @@
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a [routerLink]="['/commits']">Overview</a></li>
+    <li aria-current="page" class="breadcrumb-item active">Details</li>
+  </ol>
+</nav>
+
+<h2>Commit</h2>
+
+<table *ngIf="commit$ | async as commit" class="table table-striped">
+  <tr>
+    <th scope="row">Message</th>
+    <td>{{ commit.commit.message }}</td>
+  </tr>
+  <tr>
+    <th scope="row">Files adjusted</th>
+    <td>
+      <ul>
+        <li *ngFor="let file of commit.files">{{ file.filename }}</li>
+      </ul>
+    </td>
+  </tr>
+  <tr>
+    <th scope="row">Timestamp</th>
+    <td>{{ commit.commit.committer?.date | date : "medium" }}</td>
+  </tr>
+  <tr>
+    <th scope="row">Author</th>
+    <td>{{ commit.commit.author?.name }}</td>
+  </tr>
+</table>

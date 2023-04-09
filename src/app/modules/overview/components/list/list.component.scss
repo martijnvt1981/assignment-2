@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.table {
+  table-layout: fixed;
+}
+
+.table-header-message {
+  width: 70%;
+}
+
+.table-data-message {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
